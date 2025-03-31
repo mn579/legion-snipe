@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Snipe Relay</title>
+</head>
+<body>
+  <h1>Snipe Uplink</h1>
+
+  <form id="snipeForm">
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="number" id="score" placeholder="Score" required>
+    <button type="submit">Send</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx.../exec';
+
+    document.getElementById('snipeForm').addEventListener('submit', e => {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById('name').value,
+        score: parseInt(document.getElementById('score').value),
+      };
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.text())
+      .then(txt => {
+        document.getElementById('status').textContent = `Server said: ${txt}`;
+      })
+      .catch(err => {
+        document.getElementById('status').textContent = `Error: ${err}`;
+      });
+    });
+  </script>
+</body>
+</html>
